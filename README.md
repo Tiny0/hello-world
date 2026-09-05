@@ -6,6 +6,8 @@
 
 目前，我专注于 **AI 驱动的跨平台应用开发**，目标是构建让复杂技术变得“开箱即用”的生产力工具。
 
+👉 **[访问我的个人主页 (Visual Portfolio)](https://tiny0.github.io/hello-world/index.html)**
+
 ---
 
 ## 🛠 职业路径 (12 Years Exp)
@@ -49,6 +51,7 @@
 ---
 
 ## 📬 联系我
+- **Website**: [tiny0.github.io/hello-world](https://tiny0.github.io/hello-world/index.html)
 - **Email**: [chunxuzuo@outlook.com](mailto:chunxuzuo@outlook.com)
 - **GitHub**: [@Tiny0](https://github.com/Tiny0)
 
