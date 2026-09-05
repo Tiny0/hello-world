@@ -49,7 +49,8 @@
         h1 { font-size: 4rem; font-weight: 200; margin: 0; letter-spacing: -2px; }
         .tagline { font-size: 1.2rem; color: var(--text-dim); margin-top: 10px; font-weight: 300; }
 
-        .clock-preview { width: 300px; height: 150px; border: 1px solid var(--text-dim); border-radius: 10px; margin: 50px 0; display: flex; justify-content: center; align-items: center; font-size: 3rem; font-family: monospace; }
+        .clock-container { width: 300px; height: 300px; margin: 50px 0; position: relative; }
+        canvas { width: 100%; height: 100%; }
 
         .feature-list { list-style: none; padding: 0; display: inline-block; text-align: left; }
         .feature-list li { margin: 15px 0; font-size: 1.1rem; }
@@ -73,7 +74,9 @@
             <span class="en-only">Flowing quietly, focusing on the moment.</span>
         </p>
 
-        <div class="clock-preview" id="clock">12:00:00</div>
+        <div class="clock-container">
+            <canvas id="clockCanvas"></canvas>
+        </div>
 
         <ul class="feature-list">
             <li>
@@ -115,15 +118,117 @@
     </div>
 
     <script>
-        function updateClock() {
+        const canvas = document.getElementById('clockCanvas');
+        const ctx = canvas.getContext('2d');
+        let isReverse = true;
+
+        function drawClock() {
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+
+            const radius = canvas.width / 2;
+            const center = { x: radius, y: radius };
+            const scale = radius / 500;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
-                          now.getMinutes().toString().padStart(2, '0') + ':' +
-                          now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('clock').textContent = timeStr;
+            const isDarkTheme = document.body.dataset.theme === 'dark';
+
+            // Face Background
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius - 2*scale, 0, 2 * Math.PI);
+            ctx.fillStyle = isDarkTheme ? '#383838' : '#FFFFFF';
+            ctx.fill();
+
+            const labelColor = isDarkTheme ? '#D9D9D9' : '#171717';
+
+            // Ticks
+            for (let i = 0; i < 60; i++) {
+                ctx.save();
+                ctx.translate(center.x, center.y);
+                ctx.rotate(i * 6 * Math.PI / 180);
+                const isMajor = i % 5 === 0;
+                const w = (isMajor ? 8 : 4.5) * scale;
+                const h = 46 * scale;
+                const tGap = radius * 0.04;
+                ctx.fillStyle = labelColor;
+                if (!isMajor) ctx.globalAlpha = 0.35;
+                ctx.fillRect(-w/2, -radius + tGap, w, h);
+                ctx.restore();
+            }
+
+            // Numbers
+            const baseFontSize = radius * 0.22;
+            ctx.font = `bold ${baseFontSize}px "SF Pro Text", sans-serif`;
+            ctx.fillStyle = labelColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const mult = isReverse ? 1 : -1;
+            for (let n = 1; n <= 12; n++) {
+                // Swift: 90 + num * 30 * mult. (90 is UP in some contexts, but let's adjust for Canvas 0 = 3 o'clock)
+                // In Canvas: -90 deg is 12 o'clock.
+                // Clockwise: -90 + n * 30.
+                // Counter-clockwise: -90 - n * 30.
+                const angle = (-90 + n * 30 * mult) * Math.PI / 180;
+                const x = center.x + Math.cos(angle) * radius * 0.72;
+                const y = center.y + Math.sin(angle) * radius * 0.72;
+                ctx.fillText(n.toString(), x, y);
+            }
+
+            // Time Calculation (Mechanical/Smooth)
+            const ms = now.getMilliseconds();
+            const sVal = now.getSeconds() + ms / 1000;
+            const mVal = now.getMinutes() + sVal / 60;
+            const hVal = (now.getHours() % 12) + mVal / 60;
+
+            const rotMult = isReverse ? -1 : 1;
+
+            function drawHand(val, factor, w, len, tail, color) {
+                ctx.save();
+                ctx.translate(center.x, center.y);
+                ctx.rotate((val * factor * rotMult - 90) * Math.PI / 180);
+
+                ctx.shadowColor = 'rgba(0,0,0,0.25)';
+                ctx.shadowBlur = 3 * scale;
+                ctx.shadowOffsetY = 2 * scale;
+
+                ctx.fillStyle = color;
+                const width = w * scale;
+                const length = (len + tail) * scale;
+
+                const x = -width / 2;
+                const y = -len * scale;
+                const corner = width / 2;
+
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(x, y, width, length, corner);
+                } else {
+                    // Fallback for older browsers
+                    ctx.rect(x, y, width, length);
+                }
+                ctx.fill();
+                ctx.restore();
+            }
+
+            drawHand(hVal, 30, 32, 290, 60, labelColor);
+            drawHand(mVal, 6, 22, 440, 60, labelColor);
+            drawHand(sVal, 6, 14, 460, 75, '#FF9500');
+
+            // Center Dot
+            const dotSize = radius * 0.12;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, dotSize / 2, 0, 2 * Math.PI);
+            ctx.fillStyle = '#FF9500';
+            ctx.fill();
+
+            requestAnimationFrame(drawClock);
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+
+        drawClock();
 
         function toggleTheme() {
             document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
