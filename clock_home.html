@@ -8,14 +8,14 @@
     <style>
         :root {
             --primary: #525252;
-            --bg: #ffffff;
-            --text: #171717;
-            --text-dim: #737373;
+            --bg: #f7f7f7;
+            --text: #2d2d2d;
+            --text-dim: #7a7a7a;
         }
         [data-theme="dark"] {
-            --bg: #0a0a0a;
-            --text: #ededed;
-            --text-dim: #a1a1a1;
+            --bg: #1a1a1a;
+            --text: #d1d1d1;
+            --text-dim: #888888;
         }
 
         /* Language Toggle Display */
@@ -140,10 +140,10 @@
             // Face Background
             ctx.beginPath();
             ctx.arc(center.x, center.y, radius - 2*scale, 0, 2 * Math.PI);
-            ctx.fillStyle = isDarkTheme ? '#383838' : '#FFFFFF';
+            ctx.fillStyle = isDarkTheme ? '#2c2c2c' : '#ffffff';
             ctx.fill();
 
-            const labelColor = isDarkTheme ? '#D9D9D9' : '#171717';
+            const labelColor = isDarkTheme ? '#d1d1d1' : '#2d2d2d';
 
             // Ticks
             for (let i = 0; i < 60; i++) {
@@ -166,13 +166,12 @@
             ctx.fillStyle = labelColor;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            const mult = isReverse ? 1 : -1;
+
+            // 🎯 修复：对齐 Swift 逻辑。isReverse 为 true 时，数字应该向左排布 (1 在 11 点位置)
+            const numberMult = isReverse ? -1 : 1;
             for (let n = 1; n <= 12; n++) {
-                // Swift: 90 + num * 30 * mult. (90 is UP in some contexts, but let's adjust for Canvas 0 = 3 o'clock)
-                // In Canvas: -90 deg is 12 o'clock.
-                // Clockwise: -90 + n * 30.
-                // Counter-clockwise: -90 - n * 30.
-                const angle = (-90 + n * 30 * mult) * Math.PI / 180;
+                // Canvas 坐标系中 -90度是正上方(12点)
+                const angle = (-90 + n * 30 * numberMult) * Math.PI / 180;
                 const x = center.x + Math.cos(angle) * radius * 0.72;
                 const y = center.y + Math.sin(angle) * radius * 0.72;
                 ctx.fillText(n.toString(), x, y);
@@ -189,7 +188,8 @@
             function drawHand(val, factor, w, len, tail, color) {
                 ctx.save();
                 ctx.translate(center.x, center.y);
-                ctx.rotate((val * factor * rotMult - 90) * Math.PI / 180);
+                // 🎯 修复：因为指针是垂直绘制的 (y 为负数)，0 度已指向 12 点，不需要 -90 偏移
+                ctx.rotate((val * factor * rotMult) * Math.PI / 180);
 
                 ctx.shadowColor = 'rgba(0,0,0,0.25)';
                 ctx.shadowBlur = 3 * scale;
