@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tony Zuo | Independent Developer & AI Explorer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
+        }
+
+        /* 语言切换显示控制 */
+        [lang="zh"] .en-only { display: none; }
+        [lang="en"] .zh-only { display: none; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 语言切换按钮 */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 99px;
+            color: var(--text-main);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header / Hero Section */
+        header {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent));
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: white;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-text {
+            max-width: 600px;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: var(--text-main);
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            align-self: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge.wip {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .project-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .project-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            color: var(--text-dim);
+        }
+
+        /* Timeline / Career */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            padding: 2rem;
+            border-left: 2px solid var(--card-bg);
+            position: relative;
+            margin-left: 1rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 2.5rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 4px solid var(--bg-color);
+        }
+
+        .time {
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .company {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0.25rem 0;
+        }
+
+        .role {
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Section */
+        .contact-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent));
+            border-radius: 20px;
+            padding: 4rem;
+            text-align: center;
+            color: white;
+        }
+
+        .contact-box h2::after { background: white; }
+
+        .btn-email {
+            display: inline-block;
+            background: white;
+            color: var(--primary-color);
+            padding: 1rem 2.5rem;
+            border-radius: 99px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 2rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-email:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .contact-box { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="lang-toggle" onclick="toggleLang()">
+        <span class="zh-only">English</span>
+        <span class="en-only">中文</span>
+    </button>
+
+    <header>
+        <div class="profile-img">
+            <i class="fa-solid fa-code"></i>
+        </div>
+        <h1>Tony Zuo</h1>
+        <p class="tagline">
+            <span class="zh-only">独立开发者 & AI 探索者</span>
+            <span class="en-only">Independent Developer & AI Explorer</span>
+        </p>
+        <p class="intro-text">
+            <span class="zh-only">12 年跨界经验：从 Sony 的底层网络协议，到阿里的新零售系统架构，再到 AI 驱动的移动端创新。我用代码构建商业与技术的桥梁。</span>
+            <span class="en-only">12 years of cross-disciplinary experience: from low-level network protocols at Sony, to new retail system architecture at Alibaba, to AI-driven mobile innovations. I build bridges between business and technology through code.</span>
+        </p>
+        <div class="social-links">
+            <a href="https://github.com/Tiny0" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="mailto:chunxuzuo@outlook.com"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2>
+                <span class="zh-only">核心项目展示</span>
+                <span class="en-only">Featured Projects</span>
+            </h2>
+            <div class="projects-grid">
+
+                <!-- Project 1 -->
+                <a href="relay_home.html" style="text-decoration: none; color: inherit;">
+                    <div class="project-card">
+                        <span class="status-badge">
+                            <span class="zh-only">已上线</span>
+                            <span class="en-only">Published</span>
+                        </span>
+                        <h3>Relay</h3>
+                        <p>
+                            <span class="zh-only">将设备转化为高性能私有云门户。支持 4K 视频流与实时剪贴板同步，免安装即可跨端传输。</span>
+                            <span class="en-only">Turn your device into a high-performance private cloud portal. Supports 4K video streaming and real-time clipboard sync.</span>
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Dart</span>
+                            <span class="tech-tag">C++ Native</span>
+                            <span class="tech-tag">WebSockets</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 -->
+                <a href="https://tiny0.github.io/Snapshot-Pro/" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="project-card">
+                        <span class="status-badge">
+                            <span class="zh-only">已上线</span>
+                            <span class="en-only">Published</span>
+                        </span>
+                        <h3>Snapshot Pro</h3>
+                        <p>
+                            <span class="zh-only">专业级 macOS 资源设计器。为开发者快速生成符合 App Store 规范的截图与图标，内置 AI 灵感引擎。</span>
+                            <span class="en-only">Pro-grade macOS asset designer. Quickly generate App Store screenshots and icons with built-in AI inspiration engine.</span>
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">SwiftUI</span>
+                            <span class="tech-tag">SwiftData</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="dictation_home.html" style="text-decoration: none; color: inherit;">
+                    <div class="project-card">
+                        <span class="status-badge">
+                            <span class="zh-only">已上线</span>
+                            <span class="en-only">Published</span>
+                        </span>
+                        <h3>Dictation</h3>
+                        <p>
+                            <span class="zh-only">离线极速听写助手。基于 Sherpa-Onnx 实现 100% 隐私安全的语音转文字，并集成 LLM 智能润色。</span>
+                            <span class="en-only">Offline high-speed dictation assistant. 100% private ASR based on Sherpa-Onnx with AI-powered polishing.</span>
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Sherpa-Onnx</span>
+                            <span class="tech-tag">SwiftUI</span>
+                            <span class="tech-tag">AI Polishing</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 4 -->
+                <a href="clock_home.html" style="text-decoration: none; color: inherit;">
+                    <div class="project-card">
+                        <span class="status-badge">
+                            <span class="zh-only">已上线</span>
+                            <span class="en-only">Published</span>
+                        </span>
+                        <h3>Rewind Clock</h3>
+                        <p>
+                            <span class="zh-only">极简禅意时钟。专注深度工作的全平台悬浮时钟，支持高度自定义与隐私保护。</span>
+                            <span class="en-only">Zen-style minimalist clock. Cross-platform floating clock for deep work with high customization and privacy.</span>
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Cross-platform</span>
+                            <span class="tech-tag">Minimalist</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 5 (In Progress) -->
+                <a href="#" style="text-decoration: none; color: inherit; cursor: default;">
+                    <div class="project-card">
+                        <span class="status-badge wip">
+                            <span class="zh-only">开发中</span>
+                            <span class="en-only">In Progress</span>
+                        </span>
+                        <h3>TinyBro</h3>
+                        <p>
+                            <span class="zh-only">安全增强型浏览器。独创“稳定停车位”标签页架构，内置 DoH 解析与 SSL 安全透镜分析。</span>
+                            <span class="en-only">Security-enhanced browser. Features "Parking Slots" tab architecture and integrated DoH/SSL lens analysis.</span>
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Flutter</span>
+                            <span class="tech-tag">Network Proxy</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 6 (In Progress) -->
+                <a href="#" style="text-decoration: none; color: inherit; cursor: default;">
+                    <div class="project-card">
+                        <span class="status-badge wip">
+                            <span class="zh-only">开发中</span>
+                            <span class="en-only">In Progress</span>
+                        </span>
+                        <h3>AI MiniApp Launcher</h3>
+                        <p>
+                            <span class="zh-only">AI 微应用生成平台。自然语言生成 HTML5/JS 代码，本地沙盒运行并支持局域网共享。</span>
+                            <span class="en-only">AI-powered micro-app platform. NLP to HTML5/JS code, sandbox execution, and LAN sharing support.</span>
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">SwiftUI</span>
+                            <span class="tech-tag">LLM</span>
+                            <span class="tech-tag">Local HTTP Server</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience">
+            <h2>
+                <span class="zh-only">职业历程</span>
+                <span class="en-only">Career Path</span>
+            </h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time">2024 - <span class="zh-only">至今</span><span class="en-only">Present</span></div>
+                    <div class="company">
+                        <span class="zh-only">独立开发 & AI 创业</span>
+                        <span class="en-only">Indie Dev & AI Startup</span>
+                    </div>
+                    <div class="role">
+                        <span class="zh-only">专注于 iOS/macOS/Android AI 应用探索</span>
+                        <span class="en-only">Focusing on iOS/macOS/Android AI application exploration</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">2015 - 2023</div>
+                    <div class="company">
+                        <span class="zh-only">银泰商业 (Alibaba Group)</span>
+                        <span class="en-only">Intime Retail (Alibaba Group)</span>
+                    </div>
+                    <div class="role">
+                        <span class="zh-only">前 4 年：信息经理 / 后 4 年：新零售运营专家</span>
+                        <span class="en-only">First 4yrs: IT Manager / Last 4yrs: New Retail Ops Expert</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">2011 - 2014</div>
+                    <div class="company">
+                        <span class="zh-only">索尼中国技术中心 (Sony)</span>
+                        <span class="en-only">Sony China Tech Center</span>
+                    </div>
+                    <div class="role">
+                        <span class="zh-only">软件工程师 - 电视机部门网络应用开发</span>
+                        <span class="en-only">Software Engineer - Smart TV Network App Dev</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <div class="contact-box">
+                <h2>
+                    <span class="zh-only">准备好开启新合作了吗？</span>
+                    <span class="en-only">Ready for Collaboration?</span>
+                </h2>
+                <p>
+                    <span class="zh-only">无论是技术咨询、项目合作还是 AI 应用探讨，欢迎随时联系我。</span>
+                    <span class="en-only">Whether it's tech consulting, project collaboration, or AI discussions, feel free to reach out.</span>
+                </p>
+                <a href="mailto:chunxuzuo@outlook.com" class="btn-email">
+                    <span class="zh-only">发送邮件</span>
+                    <span class="en-only">Send Email</span>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Tony Zuo. <span class="zh-only">由 ❤️ & AI 辅助构建</span><span class="en-only">Built with ❤️ & AI</span>.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function toggleLang() {
+            const html = document.documentElement;
+            const currentLang = html.getAttribute('lang') || 'zh';
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+            html.setAttribute('lang', newLang);
+            localStorage.setItem('preferred-lang', newLang);
+        }
+
+        // 初始化语言偏好
+        const savedLang = localStorage.getItem('preferred-lang');
+        if (savedLang) {
+            document.documentElement.setAttribute('lang', savedLang);
+        }
+    </script>
+</body>
+</html>

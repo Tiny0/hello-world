@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictation | Offline High-Speed Dictation Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #a855f7;
+            --bg: #0d0d0d;
+            --card: #1a1a1a;
+            --text: #ffffff;
+            --text-dim: #a0a0a0;
+        }
+
+        /* Language Toggle Display */
+        [lang="zh"] .en-only { display: none; }
+        [lang="en"] .zh-only { display: none; }
+
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; line-height: 1.6; margin: 0; }
+
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 99px;
+            color: var(--text);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(to bottom, #2d004d 0%, #0d0d0d 100%); padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .back-btn { position: fixed; top: 20px; left: 20px; color: var(--text-dim); text-decoration: none; font-size: 0.9rem; z-index: 100; }
+
+        .badge { background: rgba(168, 85, 247, 0.2); color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 20px; display: inline-block; }
+        h1 { font-size: 3.5rem; margin: 0; background: linear-gradient(to right, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .feature-card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid rgba(168, 85, 247, 0.1); }
+        .feature-card i { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
+
+        .cta { text-align: center; margin-top: 80px; padding: 40px; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; background: var(--primary); color: white; padding: 12px 35px; border-radius: 99px; text-decoration: none; font-weight: bold; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">
+        <span class="zh-only">English</span>
+        <span class="en-only">中文</span>
+    </button>
+
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> <span class="zh-only">返回</span><span class="en-only">Back</span></a>
+
+    <div class="hero">
+        <span class="badge">
+            <span class="zh-only">隐私优先</span>
+            <span class="en-only">Privacy First AI</span>
+        </span>
+        <h1>Dictation</h1>
+        <p style="font-size: 1.2rem; color: var(--text-dim); max-width: 600px;">
+            <span class="zh-only">100% 离线语音识别 + AI 智能润色。所说即所得，所得即完美。</span>
+            <span class="en-only">100% offline speech recognition + AI smart polishing. What you say is what you get, perfectly.</span>
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>
+                    <span class="zh-only">全离线 ASR 引擎</span>
+                    <span class="en-only">Offline ASR Engine</span>
+                </h3>
+                <p>
+                    <span class="zh-only">基于 Sherpa-Onnx 技术，无需网络即可识别。数据不离开本地，绝对保护个人隐私。</span>
+                    <span class="en-only">Based on Sherpa-Onnx, works without internet. Data stays local for absolute privacy.</span>
+                </p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <h3>
+                    <span class="zh-only">AI 深度润色</span>
+                    <span class="en-only">AI Smart Polishing</span>
+                </h3>
+                <p>
+                    <span class="zh-only">集成主流大模型，自动纠错、优化语法结构，输出即是正式稿。</span>
+                    <span class="en-only">Integrated with LLMs to auto-correct typos and optimize grammar for professional output.</span>
+                </p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-keyboard"></i>
+                <h3>
+                    <span class="zh-only">全局快捷集成</span>
+                    <span class="en-only">Global Integration</span>
+                </h3>
+                <p>
+                    <span class="zh-only">支持全局热键触发，自动备份并替换剪贴板内容，丝滑融入日常工作流。</span>
+                    <span class="en-only">Global hotkey support with clipboard protection, seamlessly blending into your workflow.</span>
+                </p>
+            </div>
+        </div>
+        <div class="cta">
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://github.com/Tiny0/dictation/releases" target="_blank" class="btn">
+                    <i class="fa-solid fa-download"></i> <span class="zh-only">立即下载</span><span class="en-only">Download Now</span>
+                </a>
+                <a href="https://github.com/Tiny0/dictation" target="_blank" class="btn" style="background: transparent; border: 1px solid var(--text-dim);">
+                    <i class="fa-brands fa-github"></i> <span class="zh-only">GitHub 源码</span><span class="en-only">GitHub Source</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLang() {
+            const html = document.documentElement;
+            const currentLang = html.getAttribute('lang') || 'zh';
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+            html.setAttribute('lang', newLang);
+            localStorage.setItem('preferred-lang', newLang);
+        }
+        const savedLang = localStorage.getItem('preferred-lang');
+        if (savedLang) {
+            document.documentElement.setAttribute('lang', savedLang);
+        }
+    </script>
+</body>
+</html>

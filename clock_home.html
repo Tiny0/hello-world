@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewind Clock | Minimalist Zen Clock</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #525252;
+            --bg: #ffffff;
+            --text: #171717;
+            --text-dim: #737373;
+        }
+        [data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #ededed;
+            --text-dim: #a1a1a1;
+        }
+
+        /* Language Toggle Display */
+        [lang="zh"] .en-only { display: none; }
+        [lang="en"] .zh-only { display: none; }
+
+        body { background: var(--bg); color: var(--text); font-family: "SF Pro Text", sans-serif; line-height: 1.6; margin: 0; transition: background 0.5s; }
+
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 99px;
+            color: var(--text);
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+        }
+        [data-theme="dark"] .lang-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .back-btn { position: fixed; top: 20px; left: 20px; color: var(--text-dim); text-decoration: none; font-size: 0.9rem; z-index: 100; }
+
+        h1 { font-size: 4rem; font-weight: 200; margin: 0; letter-spacing: -2px; }
+        .tagline { font-size: 1.2rem; color: var(--text-dim); margin-top: 10px; font-weight: 300; }
+
+        .clock-preview { width: 300px; height: 150px; border: 1px solid var(--text-dim); border-radius: 10px; margin: 50px 0; display: flex; justify-content: center; align-items: center; font-size: 3rem; font-family: monospace; }
+
+        .feature-list { list-style: none; padding: 0; display: inline-block; text-align: left; }
+        .feature-list li { margin: 15px 0; font-size: 1.1rem; }
+        .feature-list i { margin-right: 15px; color: var(--text-dim); }
+
+        .btn-toggle { background: none; border: 1px solid var(--text-dim); color: var(--text); padding: 8px 20px; border-radius: 5px; cursor: pointer; margin-top: 20px; font-size: 0.9rem; }
+    </style>
+</head>
+<body data-theme="dark">
+    <button class="lang-toggle" onclick="toggleLang()">
+        <span class="zh-only">English</span>
+        <span class="en-only">中文</span>
+    </button>
+
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> <span class="zh-only">返回</span><span class="en-only">Back</span></a>
+
+    <div class="hero">
+        <h1>Rewind Clock</h1>
+        <p class="tagline">
+            <span class="zh-only">静谧流逝，专注于此刻。</span>
+            <span class="en-only">Flowing quietly, focusing on the moment.</span>
+        </p>
+
+        <div class="clock-preview" id="clock">12:00:00</div>
+
+        <ul class="feature-list">
+            <li>
+                <i class="fa-solid fa-check"></i>
+                <span class="zh-only">极简主义设计，去除一切干扰</span>
+                <span class="en-only">Minimalist design, zero distractions</span>
+            </li>
+            <li>
+                <i class="fa-solid fa-check"></i>
+                <span class="zh-only">悬浮窗口模式，始终保持可见</span>
+                <span class="en-only">Floating window mode, always visible</span>
+            </li>
+            <li>
+                <i class="fa-solid fa-check"></i>
+                <span class="zh-only">自由缩放与自定义主题</span>
+                <span class="en-only">Flexible scaling and custom themes</span>
+            </li>
+            <li>
+                <i class="fa-solid fa-check"></i>
+                <span class="zh-only">100% 客户端运行，无追踪无广告</span>
+                <span class="en-only">100% client-side, no tracking, no ads</span>
+            </li>
+        </ul>
+
+        <div style="display: flex; gap: 15px;">
+            <a href="https://apps.apple.com/us/app/rewindclock/id6797912814" target="_blank" class="btn-toggle" style="background: var(--text); color: var(--bg); text-decoration: none; border: none;">
+                <i class="fa-brands fa-apple"></i> App Store
+            </a>
+            <button class="btn-toggle" onclick="toggleTheme()">
+                <span class="zh-only">切换主题</span><span class="en-only">Toggle Theme</span>
+            </button>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <a href="https://github.com/Tiny0/rewindclock" target="_blank" style="color: var(--text-dim); text-decoration: underline; font-size: 0.9rem;">
+                <span class="zh-only">GitHub 源码</span><span class="en-only">GitHub Source</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                          now.getMinutes().toString().padStart(2, '0') + ':' +
+                          now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function toggleTheme() {
+            document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+        }
+
+        function toggleLang() {
+            const html = document.documentElement;
+            const currentLang = html.getAttribute('lang') || 'zh';
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+            html.setAttribute('lang', newLang);
+            localStorage.setItem('preferred-lang', newLang);
+        }
+        const savedLang = localStorage.getItem('preferred-lang');
+        if (savedLang) {
+            document.documentElement.setAttribute('lang', savedLang);
+        }
+    </script>
+</body>
+</html>

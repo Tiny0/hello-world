@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relay | High Performance Local Private Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        /* Language Toggle Display */
+        [lang="zh"] .en-only { display: none; }
+        [lang="en"] .zh-only { display: none; }
+
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; line-height: 1.6; margin: 0; }
+
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 99px;
+            color: var(--text);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .hero { height: 65vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #1e3a8a 0%, #0f172a 100%); padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .back-btn { position: fixed; top: 20px; left: 20px; color: var(--text-dim); text-decoration: none; font-size: 0.9rem; z-index: 100; }
+
+        .badge { background: rgba(59, 130, 246, 0.2); color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 20px; display: inline-block; }
+        h1 { font-size: 3.5rem; margin: 0; }
+
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; }
+        .feature-card { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .feature-card i { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
+
+        .cta { text-align: center; margin-top: 60px; padding: 60px 40px; background: var(--card); border-radius: 20px; }
+        .btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border-radius: 10px; text-decoration: none; font-weight: bold; transition: transform 0.2s; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-outline { border: 1px solid var(--text-dim); color: var(--text); }
+
+        .app-store-badge img { height: 40px; }
+    </style>
+</head>
+<body class="relay-page">
+    <button class="lang-toggle" onclick="toggleLang()">
+        <span class="zh-only">English</span>
+        <span class="en-only">中文</span>
+    </button>
+
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> <span class="zh-only">返回</span><span class="en-only">Back</span></a>
+
+    <div class="hero">
+        <span class="badge">
+            <span class="zh-only">设备即门户</span>
+            <span class="en-only">Portal as a Service</span>
+        </span>
+        <h1>Relay</h1>
+        <p style="font-size: 1.2rem; color: var(--text-dim); max-width: 600px;">
+            <span class="zh-only">将你的设备瞬间转变为高性能局域网私有云，打破跨端传输的繁琐限制。</span>
+            <span class="en-only">Instantly turn your device into a high-performance local private cloud, breaking the barriers of cross-platform transfer.</span>
+        </p>
+        <div class="btn-group">
+            <a href="https://apps.apple.com/us/app/relay-local-file-transfer/id6793352101" target="_blank" class="btn btn-primary">
+                <i class="fa-brands fa-apple"></i> <span class="zh-only">App Store 下载</span><span class="en-only">App Store Download</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <i class="fa-solid fa-globe"></i>
+                <h3>
+                    <span class="zh-only">浏览器即客户端</span>
+                    <span class="en-only">Browser as a Client</span>
+                </h3>
+                <p>
+                    <span class="zh-only">接收方无需安装任何 App。只需扫描二维码或输入 URL，即可在任何设备的浏览器中访问文件。</span>
+                    <span class="en-only">No app installation needed for receivers. Just scan a QR code or enter a URL to access files in any browser.</span>
+                </p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-bolt"></i>
+                <h3>
+                    <span class="zh-only">原生性能加速</span>
+                    <span class="en-only">Native Acceleration</span>
+                </h3>
+                <p>
+                    <span class="zh-only">Android 端集成 Native C++ 服务器，绕过 Dart IO 瓶颈，实现极速传输，稳定承载 4K 视频流。</span>
+                    <span class="en-only">Integrated Native C++ server on Android bypasses Dart IO bottlenecks for high-speed 4K/HD streaming.</span>
+                </p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-clipboard"></i>
+                <h3>
+                    <span class="zh-only">实时剪贴板同步</span>
+                    <span class="en-only">Real-time Clipboard Sync</span>
+                </h3>
+                <p>
+                    <span class="zh-only">基于 WebSockets 的双向实时同步。在主机拷贝，浏览器端即时感知，跨端协作从未如此自然。</span>
+                    <span class="en-only">Bi-directional real-time sync via WebSockets. Copy on host, instantly perceive on browser. Collaboration made natural.</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="cta">
+            <h2>
+                <span class="zh-only">立即获取 Relay</span>
+                <span class="en-only">Get Relay Now</span>
+            </h2>
+            <p>
+                <span class="zh-only">体验极致的局域网传输效率。</span>
+                <span class="en-only">Experience the ultimate local network transfer efficiency.</span>
+            </p>
+            <div class="btn-group">
+                <a href="https://apps.apple.com/us/app/relay-local-file-transfer/id6793352101" target="_blank" class="btn btn-primary">
+                    <i class="fa-brands fa-apple"></i> <span class="zh-only">App Store 下载</span><span class="en-only">Download on App Store</span>
+                </a>
+                <a href="https://github.com/Tiny0/Relay" target="_blank" class="btn btn-outline">
+                    <i class="fa-brands fa-github"></i> <span class="zh-only">GitHub 源码</span><span class="en-only">GitHub Source</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLang() {
+            const html = document.documentElement;
+            const currentLang = html.getAttribute('lang') || 'zh';
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+            html.setAttribute('lang', newLang);
+            localStorage.setItem('preferred-lang', newLang);
+        }
+        const savedLang = localStorage.getItem('preferred-lang');
+        if (savedLang) {
+            document.documentElement.setAttribute('lang', savedLang);
+        }
+    </script>
+</body>
+</html>
